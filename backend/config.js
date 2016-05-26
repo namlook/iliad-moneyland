@@ -1,10 +1,9 @@
-/* jshint node: true */
 
 import schemas from './schemas';
 import { importDir } from 'odyssee/src/utils';
 
-module.exports = {
-  name: 'test',
+export default {
+  name: 'moneyland',
   host: '0.0.0.0',
   port: 8888,
   log: ['info', 'warn'],

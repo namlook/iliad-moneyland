@@ -1,5 +1,5 @@
 
-module.exports = {
+export default {
   Expense: {
     properties: {
       title: 'string',
