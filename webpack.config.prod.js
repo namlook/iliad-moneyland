@@ -7,7 +7,7 @@ const GLOBALS = {
   __DEV__: false,
 };
 
-const PUBLIC_PATH = '/scora/';
+const PUBLIC_PATH = '/';
 
 export default {
   debug: true,
@@ -15,7 +15,7 @@ export default {
   // and https://webpack.github.io/docs/configuration.html#devtool
   devtool: 'source-map',
   noInfo: true, // set to false to see a list of every file being bundled.
-  entry: './src/index',
+  entry: './frontend/index',
   target: 'web', // necessary per https://webpack.github.io/docs/testing.html#compile-and-test
   output: {
      // Note: Physical files are only output by the production build task `npm run build`.
@@ -28,6 +28,10 @@ export default {
     // Tells React to build in prod mode. https://facebook.github.io/react/downloads.html
     new webpack.DefinePlugin(GLOBALS),
     new ExtractTextPlugin('styles.css'),
+    new webpack.ProvidePlugin({
+      Promise: 'es6-promise',
+      fetch: 'imports?this=>global!exports?global.fetch!whatwg-fetch',
+    }),
     new webpack.optimize.DedupePlugin(),
     new webpack.optimize.UglifyJsPlugin(),
   ],
@@ -43,15 +47,28 @@ export default {
   module: {
     loaders: [
       {
-        test: /\.(js|jsx)$/,
-        include: path.join(__dirname, 'src'),
-        loaders: ['babel', 'eslint'],
+        loaders: [
+          {
+            loader: 'babel',
+            test: /\.(js|jsx)$/,
+            include: path.join(__dirname, 'frontend'),
+            query: {
+              presets: ['es2015', 'react', 'stage-1'],
+            },
+          },
+          {
+            loader: 'eslint',
+            test: /\.(js|jsx)$/,
+            include: path.join(__dirname, 'frontend'),
+          },
+        ],
+
       },
       { test: /\.(jpe?g|png|gif|woff|woff2|eot|ttf|svg)$/i, loaders: ['file'] },
       {
         test: /(\.css|\.scss)$/,
         include: [
-          path.join(__dirname, 'src'),
+          path.join(__dirname, 'frontend'),
           path.join(__dirname, 'node_modules/odyssee-client/styles/styles.scss'),
           // path.join(__dirname, 'node_modules/odyssee-client/lib/styles.scss'),
           path.join(__dirname, 'node_modules/semantic-ui-css/semantic.css'),

@@ -14,7 +14,7 @@ export default {
   noInfo: true, // set to false to see a list of every file being bundled.
   entry: [
     'webpack-hot-middleware/client?reload=true',
-    './src/index',
+    './frontend/index',
   ],
   target: 'web', // necessary per https://webpack.github.io/docs/testing.html#compile-and-test
   output: {
@@ -27,9 +27,14 @@ export default {
     // Tells React to build in prod mode. https://facebook.github.io/react/downloads.html
     new webpack.DefinePlugin(GLOBALS),
     new webpack.HotModuleReplacementPlugin(),
+    new webpack.ProvidePlugin({
+      Promise: 'es6-promise',
+      fetch: 'imports?this=>global!exports?global.fetch!whatwg-fetch',
+    }),
     new webpack.NoErrorsPlugin(),
   ],
   resolve: {
+    extensions: ['', '.js', '.jsx'],
     // required to prevent multiple install of react
     fallback: [path.join(__dirname, 'node_modules')],
   },
@@ -39,7 +44,19 @@ export default {
   // },
   module: {
     loaders: [
-      { test: /\.(js|jsx)$/, include: path.join(__dirname, 'src'), loaders: ['babel', 'eslint'] },
+      {
+        loader: 'babel',
+        test: /\.(js|jsx)$/,
+        include: path.join(__dirname, 'frontend'),
+        query: {
+          presets: ['es2015', 'react', 'stage-1'],
+        },
+      },
+      {
+        loader: 'eslint',
+        test: /\.(js|jsx)$/,
+        include: path.join(__dirname, 'frontend'),
+      },
       { test: /\.(jpe?g|png|gif|woff|woff2|eot|ttf|svg)$/i, loaders: ['file'] },
       { test: /(\.css|\.scss)$/, loaders: ['style', 'css', 'sass?sourceMap'] },
     ],
