@@ -2,14 +2,33 @@
 // This boilerplate file is likely to be the same for each project that uses Redux.
 // With Redux, the actual stores are in /reducers.
 
-import { createStore, compose } from 'redux';
+import { createStore, compose, applyMiddleware } from 'redux';
 import rootReducer from '../reducers';
+import thunkMiddleware from 'redux-thunk';
+
+
+// const logger = store => next => action => {
+//   console.group(action.type);
+//   console.info('dispatching', action);
+//   const result = next(action);
+//   console.log('next state', store.getState());
+//   console.groupEnd(action.type);
+//   return result;
+// };
+
 
 export default function configureStore(initialState) {
-  const store = createStore(rootReducer, initialState, compose(
-    // Add other middleware on this line...
-    // add support for Redux dev tools
-    window.devToolsExtension ? window.devToolsExtension() : f => f
+  const store = createStore(
+    rootReducer,
+    initialState,
+    compose(
+      applyMiddleware(
+        thunkMiddleware
+        // logger
+      ),
+      // Add other middleware on this line...
+      // add support for Redux dev tools
+      window.devToolsExtension ? window.devToolsExtension() : f => f
     )
   );
 
