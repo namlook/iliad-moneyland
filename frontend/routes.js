@@ -1,5 +1,4 @@
 
-
 import structure from './structure';
 import register from './register';
 import { buildRoutes, extractActions } from 'odyssee-client';
