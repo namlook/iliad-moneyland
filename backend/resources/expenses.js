@@ -6,6 +6,8 @@ import {
 
 import {
   queryRoute as streamQueryRoute,
+  postRoute as streamPostRoute,
+  deleteRoute as streamDeleteRoute,
   exposeAllProperties as streamQueryExposeAllProperties,
 } from 'odyssee/src/routes/stream';
 
@@ -14,8 +16,8 @@ import schemas from '../schemas';
 import { jsonApiQueryExpose as jsonApiQueryExposeCategory } from './categories';
 import { jsonApiQueryExpose as jsonApiQueryExposeUser } from './users';
 
-export const jsonApiQueryExpose = jsonApiQueryExposeAllProperties(schemas.Expense);
-export const streamQueryExpose = streamQueryExposeAllProperties(schemas.Expense);
+export const jsonApiQueryExposeAll = jsonApiQueryExposeAllProperties(schemas.Expense);
+export const streamQueryExposeAll = streamQueryExposeAllProperties(schemas.Expense);
 
 // jsonApiQueryExposeAllProperties(modelSchema) === {
 //     fields: {
@@ -48,16 +50,22 @@ export default () => ({
     jsonApiQueryRoute({
       path: '/',
       expose: {
-        ...jsonApiQueryExpose,
+        ...jsonApiQueryExposeAll,
         included: { // put here the resources that are allowed be to included
           categories: jsonApiQueryExposeCategory,
           users: jsonApiQueryExposeUser,
         },
       },
     }),
+    streamPostRoute({
+      path: '/i/stream',
+    }),
+    streamDeleteRoute({
+      path: '/i/stream',
+    }),
     streamQueryRoute({
       path: '/i/stream',
-      expose: streamQueryExpose,
+      expose: streamQueryExposeAll,
       // expose: {
       //   fields: ['_id', '_type', 'title', 'amount', 'paidBy', 'for'],
       //   aggregate: ['paidBy', 'for', 'amount', 'categories'],

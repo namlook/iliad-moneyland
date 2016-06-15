@@ -25,15 +25,29 @@ export default {
       // ],
     },
     {
-      type: 'flash-messages',
-      store: {
-        name: 'flash-messages',
-      },
-    },
-    {
       layout: { mobile: 16, tablet: 16, computer: 13 },
-      type: 'outlet',
+      type: 'grid',
+      widgets: [
+        {
+          layout: { mobile: 16 },
+          type: 'flash-messages',
+          store: {
+            name: 'flash-messages',
+          },
+        },
+        {
+          layout: { mobile: 16 },
+          type: 'outlet',
+        },
+      ],
     },
+    // {
+    //   layout: { mobile: 16 },
+    //   type: 'flash-messages',
+    //   store: {
+    //     name: 'flash-messages',
+    //   },
+    // },
     {
       type: 'mobile-application-menu',
       layout: { mobile: 16, table: 16, computer: 0 },
